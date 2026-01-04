@@ -37,14 +37,14 @@ const BIRTHDAY_PERSON = {
   name: "Ayan",
   // Your personal photos!
   photos: [
-    "/1.jpeg",
-    "/2.jpeg",
-    "/3.jpeg",
-    "/4.jpeg",
     "/5.jpeg",
     "/6.jpeg",
-    "/7.jpeg",
     "/8.jpeg",
+    "/2.jpeg",
+    "/3.jpeg",
+    "/1.jpeg",
+    "/4.jpeg",
+    "/7.jpeg",
   ],
   wishMessage: `May this special day bring you endless joy, 
     laughter, and all the happiness your heart can hold! 
