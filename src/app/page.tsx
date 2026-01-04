@@ -306,7 +306,9 @@ export default function BirthdayCelebration() {
               animationDelay: `${balloon.delay}s`,
               transform: `scale(${balloon.size})`,
             }}
-          />
+          >
+            <div className="balloon-string"></div>
+          </div>
         ))}
       </div>
 

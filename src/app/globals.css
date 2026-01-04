@@ -235,76 +235,110 @@ body {
 .bulb-wire {
   width: 2px;
   height: 60px;
-  background: linear-gradient(to bottom, #333, #555);
+  background: #444;
   position: relative;
+  z-index: 10;
 }
 
 .bulb-wire::before {
   content: '';
   position: absolute;
-  bottom: -5px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 12px;
-  height: 10px;
-  background: #333;
-  border-radius: 3px 3px 0 0;
+  width: 16px;
+  height: 12px;
+  background: linear-gradient(90deg, #333, #666, #333);
+  border-radius: 2px;
+  border-top: 1px solid #777;
+  border-bottom: 2px solid #222;
 }
 
 .bulb {
   width: 40px;
   height: 55px;
-  border-radius: 50% 50% 45% 45%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50% 50% 40% 40%;
   position: relative;
-  opacity: 0.3;
+  opacity: 0.4;
   transition: all 0.5s ease;
-  filter: blur(0px);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.bulb::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: 20%;
+  width: 10px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(-45deg);
 }
 
 .bulb.lit {
   opacity: 1;
-  filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 40px currentColor);
-  animation: bulbFlicker 3s infinite;
+  filter: drop-shadow(0 0 15px currentColor) drop-shadow(0 0 30px currentColor);
+  animation: bulbSwing 3s ease-in-out infinite alternate, bulbFlicker 4s infinite random;
+}
+
+@keyframes bulbSwing {
+  from {
+    transform: rotate(-3deg);
+  }
+
+  to {
+    transform: rotate(3deg);
+  }
 }
 
 .bulb.red {
-  background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc0000);
-  color: #ff6b6b;
+  background: #ff4d4d;
+  color: #ff0000;
+  box-shadow: 0 0 20px #ff0000;
 }
 
 .bulb.yellow {
-  background: radial-gradient(circle at 30% 30%, #ffd93d, #ffaa00);
-  color: #ffd93d;
+  background: #ffcc00;
+  color: #ffaa00;
+  box-shadow: 0 0 20px #ffaa00;
 }
 
 .bulb.green {
-  background: radial-gradient(circle at 30% 30%, #6bcb77, #00aa44);
-  color: #6bcb77;
+  background: #33cc33;
+  color: #008800;
+  box-shadow: 0 0 20px #008800;
 }
 
 .bulb.blue {
-  background: radial-gradient(circle at 30% 30%, #4d96ff, #0066cc);
-  color: #4d96ff;
+  background: #3399ff;
+  color: #0044cc;
+  box-shadow: 0 0 20px #0044cc;
 }
 
 .bulb.purple {
-  background: radial-gradient(circle at 30% 30%, #c44cff, #8800cc);
-  color: #c44cff;
+  background: #cc66ff;
+  color: #8800cc;
+  box-shadow: 0 0 20px #8800cc;
 }
 
 .bulb.pink {
-  background: radial-gradient(circle at 30% 30%, #ff6b9d, #ff1493);
-  color: #ff6b9d;
+  background: #ff66b3;
+  color: #cc0066;
+  box-shadow: 0 0 20px #cc0066;
 }
 
 .bulb.orange {
-  background: radial-gradient(circle at 30% 30%, #ff9f43, #ff6600);
-  color: #ff9f43;
+  background: #ff9933;
+  color: #cc4400;
+  box-shadow: 0 0 20px #cc4400;
 }
 
 .bulb.cyan {
-  background: radial-gradient(circle at 30% 30%, #22d3ee, #00b4d8);
-  color: #22d3ee;
+  background: #33ccff;
+  color: #0088aa;
+  box-shadow: 0 0 20px #0088aa;
 }
 
 @keyframes bulbFlicker {
@@ -350,101 +384,125 @@ body {
   position: absolute;
   width: 60px;
   height: 75px;
-  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  border-radius: 45% 45% 45% 45% / 40% 40% 60% 60%;
   opacity: 0;
-  transform: translateY(100vh);
+  transform: translateY(110vh);
   transition: opacity 0.5s;
 }
 
+/* Shiny reflection on balloon * /
 .balloon::before {
   content: '';
   position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2px;
-  height: 80px;
-  background: linear-gradient(to bottom, currentColor, transparent);
+  top: 15%;
+  left: 20%;
+  width: 12px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: rotate(20deg);
 }
 
+/* Balloon Knot */
 .balloon::after {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 12px solid currentColor;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 10px solid currentColor;
+}
+
+.balloon-string {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: -1;
 }
 
 .balloon.floating {
-  opacity: 0.9;
-  animation: floatUp 8s ease-out forwards, sway 3s ease-in-out infinite;
+  opacity: 0.95;
+  animation: floatUp 8s ease-out forwards, sway 3s ease-in-out infinite alternate;
 }
 
 .balloon.b-red {
-  background: radial-gradient(circle at 30% 20%, #ff9999, #ff4444, #cc0000);
+  background: radial-gradient(circle at 50% 40%, #ff5555, #cc0000);
   color: #cc0000;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 68, 68, 0.3);
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-blue {
-  background: radial-gradient(circle at 30% 20%, #99ccff, #4488ff, #0066cc);
-  color: #0066cc;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(68, 136, 255, 0.3);
+  background: radial-gradient(circle at 50% 40%, #55aaff, #0044cc);
+  color: #0044cc;
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-green {
-  background: radial-gradient(circle at 30% 20%, #99ff99, #44cc44, #00aa00);
-  color: #00aa00;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(68, 204, 68, 0.3);
+  background: radial-gradient(circle at 50% 40%, #55ff55, #008800);
+  color: #008800;
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-yellow {
-  background: radial-gradient(circle at 30% 20%, #ffff99, #ffdd44, #ccaa00);
+  background: radial-gradient(circle at 50% 40%, #ffff55, #ccaa00);
   color: #ccaa00;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 221, 68, 0.3);
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-purple {
-  background: radial-gradient(circle at 30% 20%, #dd99ff, #aa44ff, #8800cc);
-  color: #8800cc;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(170, 68, 255, 0.3);
+  background: radial-gradient(circle at 50% 40%, #d555ff, #6600cc);
+  color: #6600cc;
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-pink {
-  background: radial-gradient(circle at 30% 20%, #ffaacc, #ff6699, #cc3366);
+  background: radial-gradient(circle at 50% 40%, #ff88cc, #cc3366);
   color: #cc3366;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 102, 153, 0.3);
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .balloon.b-orange {
-  background: radial-gradient(circle at 30% 20%, #ffcc99, #ff9944, #cc6600);
-  color: #cc6600;
-  box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(255, 153, 68, 0.3);
+  background: radial-gradient(circle at 50% 40%, #ffaa55, #cc4400);
+  color: #cc4400;
+  box-shadow: inset -5px -5px 15px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes floatUp {
   0% {
-    transform: translateY(100vh) rotate(0deg);
+    transform: translateY(110vh) rotate(0deg);
+  }
+
+  15% {
+    transform: translateY(80vh) rotate(5deg);
+  }
+
+  40% {
+    transform: translateY(50vh) rotate(-5deg);
+  }
+
+  70% {
+    transform: translateY(20vh) rotate(3deg);
   }
 
   100% {
-    transform: translateY(-150px) rotate(5deg);
+    transform: translateY(-20vh) rotate(-2deg);
   }
 }
 
 @keyframes sway {
-
-  0%,
-  100% {
-    margin-left: 0;
+  from {
+    margin-left: -20px;
   }
 
-  50% {
+  to {
     margin-left: 20px;
   }
 }
