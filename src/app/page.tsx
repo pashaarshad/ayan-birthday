@@ -447,6 +447,31 @@ export default function BirthdayCelebration() {
         >
           💌 See Birthday Wish
         </button>
+
+        {/* Designer Credit */}
+        <a
+          href="https://arshadpasha.tech"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            marginTop: "20px",
+            color: "rgba(255,215,0,0.7)",
+            fontSize: "0.9rem",
+            textDecoration: "none",
+            fontFamily: "Dancing Script, cursive",
+            transition: "all 0.3s ease"
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#ffd700";
+            e.currentTarget.style.textShadow = "0 0 10px rgba(255,215,0,0.5)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "rgba(255,215,0,0.7)";
+            e.currentTarget.style.textShadow = "none";
+          }}
+        >
+          ✨ Designed by Arshad ✨
+        </a>
       </div>
 
       {/* Photo Modal - Full View */}

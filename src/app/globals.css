@@ -11,6 +11,25 @@
   --warm-glow: #ffaa00;
 }
 
+/* Designer credit blink animation */
+@keyframes designerBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.4);
+  }
+
+  50% {
+    opacity: 0.6;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  }
+}
+
+.designer-credit {
+  animation: designerBlink 2s ease-in-out infinite;
+}
+
 * {
   margin: 0;
   padding: 0;
