@@ -211,7 +211,7 @@ export default function BirthdayCelebration() {
           }
           return next;
         });
-      }, 1000); // 1 second per photo
+      }, 2000); // 2 seconds per photo
       return () => clearInterval(interval);
     }
   }, [showGallery, showAllPhotos]);
