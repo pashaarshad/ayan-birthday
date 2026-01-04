@@ -453,21 +453,13 @@ export default function BirthdayCelebration() {
           href="https://arshadpasha.tech"
           target="_blank"
           rel="noopener noreferrer"
+          className="designer-credit"
           style={{
             marginTop: "20px",
-            color: "rgba(255,215,0,0.7)",
-            fontSize: "0.9rem",
+            color: "#ffd700",
+            fontSize: "1.3rem",
             textDecoration: "none",
             fontFamily: "Dancing Script, cursive",
-            transition: "all 0.3s ease"
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = "#ffd700";
-            e.currentTarget.style.textShadow = "0 0 10px rgba(255,215,0,0.5)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = "rgba(255,215,0,0.7)";
-            e.currentTarget.style.textShadow = "none";
           }}
         >
           ✨ Designed by Arshad ✨
@@ -514,8 +506,8 @@ export default function BirthdayCelebration() {
           <Image
             src={BIRTHDAY_PERSON.photos[selectedPhoto]}
             alt={`Memory ${selectedPhoto + 1}`}
-            width={500}
-            height={500}
+            width={300}
+            height={300}
             style={{
               objectFit: "contain",
               maxWidth: "90%",
