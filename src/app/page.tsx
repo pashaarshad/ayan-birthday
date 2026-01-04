@@ -56,8 +56,6 @@ const BIRTHDAY_PERSON = {
     🎉✨🎂 Happy Birthday! 🎂✨🎉`,
 };
 
-// Cake image - using one of your images
-const CAKE_IMAGE = "/1.jpeg";
 
 // Bulb colors for the hanging lights
 const BULB_COLORS = ["red", "yellow", "green", "blue", "purple", "pink", "orange", "cyan", "red", "yellow", "green", "blue"];
@@ -74,10 +72,11 @@ export default function BirthdayCelebration() {
   const [balloons, setBalloons] = useState<Balloon[]>([]);
   const [stars, setStars] = useState<Star[]>([]);
   const [confetti, setConfetti] = useState<Confetti[]>([]);
-  const [showCake, setShowCake] = useState(false);
   const [showBirthdayText, setShowBirthdayText] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState(0);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const [showWish, setShowWish] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
   const [audioPlaying, setAudioPlaying] = useState(false);
@@ -167,44 +166,52 @@ export default function BirthdayCelebration() {
     setTimeout(() => setConfetti([]), 6000);
   };
 
-  // Bring the cake and show birthday text
-  const bringCake = useCallback(() => {
+  // Show birthday text and then celebrate
+  const showBirthdayAndCelebrate = useCallback(() => {
     setStage("cake");
-    setShowCake(true);
-
-    setTimeout(() => {
-      setShowBirthdayText(true);
-      launchConfetti();
-    }, 1200);
+    setShowBirthdayText(true);
+    launchConfetti();
   }, []);
 
   // Final celebration with gallery and wish
   const celebrate = useCallback(() => {
     setShowBirthdayText(false);
-    setShowCake(false);
+    setCurrentPhoto(0);
 
     setTimeout(() => {
       setShowGallery(true);
     }, 500);
-
-    setTimeout(() => {
-      setShowGallery(false);
-      setShowWish(true);
-      setShowFireworks(true);
-      launchConfetti();
-    }, 10000);
   }, []);
 
-  // Photo slideshow
+  // Photo slideshow - 1 second per photo, then show all photos grid
   useEffect(() => {
-    if (showGallery) {
+    if (showGallery && !showAllPhotos) {
       const interval = setInterval(() => {
-        setCurrentPhoto((prev) => (prev + 1) % BIRTHDAY_PERSON.photos.length);
-        launchConfetti();
-      }, 3000);
+        setCurrentPhoto((prev) => {
+          const next = prev + 1;
+          if (next >= BIRTHDAY_PERSON.photos.length) {
+            // All photos shown, now show all photos grid
+            clearInterval(interval);
+            setShowGallery(false);
+            setShowAllPhotos(true);
+            launchConfetti();
+            return prev;
+          }
+          return next;
+        });
+      }, 1000); // 1 second per photo
       return () => clearInterval(interval);
     }
-  }, [showGallery]);
+  }, [showGallery, showAllPhotos]);
+
+  // Continue to wish message
+  const showWishMessage = () => {
+    setShowAllPhotos(false);
+    setSelectedPhoto(null);
+    setShowWish(true);
+    setShowFireworks(true);
+    launchConfetti();
+  };
 
   // Continuous celebration effects
   useEffect(() => {
@@ -223,9 +230,10 @@ export default function BirthdayCelebration() {
     setBalloons([]);
     setStars([]);
     setConfetti([]);
-    setShowCake(false);
     setShowBirthdayText(false);
     setShowGallery(false);
+    setShowAllPhotos(false);
+    setSelectedPhoto(null);
     setShowWish(false);
     setShowFireworks(false);
     setCurrentPhoto(0);
@@ -319,26 +327,13 @@ export default function BirthdayCelebration() {
         ))}
       </div>
 
-      {/* Birthday Cake */}
-      <div className={`cake-container ${showCake ? "visible" : ""}`}>
-        <Image
-          src={CAKE_IMAGE}
-          alt="Birthday Cake"
-          width={280}
-          height={280}
-          className="cake-image"
-          unoptimized
-          priority
-        />
-      </div>
-
       {/* Happy Birthday Text */}
       <div className={`birthday-text-container ${showBirthdayText ? "visible" : ""}`}>
         <h1 className="happy-birthday-text">Happy Birthday!</h1>
         <h2 className="birthday-name">{BIRTHDAY_PERSON.name} 🎂</h2>
       </div>
 
-      {/* Photo Gallery / Memory Lane */}
+      {/* Photo Gallery / Memory Lane - Single Photo Slideshow */}
       <div className={`gallery-container ${showGallery ? "visible" : ""}`}>
         <div className="photo-frame">
           <Image
@@ -371,9 +366,136 @@ export default function BirthdayCelebration() {
           fontSize: "1.5rem",
           textShadow: "0 2px 10px rgba(0,0,0,0.5)"
         }}>
-          ✨ Beautiful Memories ✨
+          ✨ Memory {currentPhoto + 1} of {BIRTHDAY_PERSON.photos.length} ✨
         </p>
       </div>
+
+      {/* All Photos Grid - After Slideshow */}
+      <div className={`gallery-container ${showAllPhotos ? "visible" : ""}`}>
+        <h2 style={{
+          fontFamily: "Pacifico, cursive",
+          fontSize: "2.5rem",
+          color: "#ffd700",
+          marginBottom: "30px",
+          textShadow: "0 0 20px rgba(255,215,0,0.5)"
+        }}>
+          ✨ Beautiful Memories ✨
+        </h2>
+        <p style={{ color: "#fff", marginBottom: "20px", fontSize: "1rem" }}>
+          Click any photo to view it larger
+        </p>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "15px",
+          maxWidth: "700px",
+          padding: "20px"
+        }}>
+          {BIRTHDAY_PERSON.photos.map((photo, index) => (
+            <div
+              key={index}
+              onClick={() => setSelectedPhoto(index)}
+              style={{
+                borderRadius: "15px",
+                overflow: "hidden",
+                boxShadow: "0 5px 20px rgba(0,0,0,0.4)",
+                border: "3px solid rgba(255,215,0,0.5)",
+                animation: `fadeIn 0.5s ease-out ${index * 0.1}s both`,
+                cursor: "pointer",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.1)";
+                e.currentTarget.style.boxShadow = "0 10px 30px rgba(255,215,0,0.5)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 5px 20px rgba(0,0,0,0.4)";
+              }}
+            >
+              <Image
+                src={photo}
+                alt={`Memory ${index + 1}`}
+                width={150}
+                height={150}
+                style={{ objectFit: "cover", width: "100%", height: "150px" }}
+                unoptimized
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Continue Button */}
+        <button
+          onClick={showWishMessage}
+          className="magic-button celebrate-button"
+          style={{ marginTop: "30px" }}
+        >
+          💌 See Birthday Wish
+        </button>
+      </div>
+
+      {/* Photo Modal - Full View */}
+      {selectedPhoto !== null && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0,0,0,0.9)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 200
+          }}
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <button
+            onClick={() => setSelectedPhoto(null)}
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              background: "rgba(255,255,255,0.2)",
+              border: "2px solid #fff",
+              borderRadius: "50%",
+              width: "50px",
+              height: "50px",
+              fontSize: "24px",
+              color: "#fff",
+              cursor: "pointer",
+              transition: "all 0.3s ease"
+            }}
+          >
+            ✕
+          </button>
+          <Image
+            src={BIRTHDAY_PERSON.photos[selectedPhoto]}
+            alt={`Memory ${selectedPhoto + 1}`}
+            width={500}
+            height={500}
+            style={{
+              objectFit: "contain",
+              maxWidth: "90%",
+              maxHeight: "80vh",
+              borderRadius: "20px",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.5)"
+            }}
+            unoptimized
+          />
+          <p style={{
+            color: "#ffd700",
+            marginTop: "20px",
+            fontFamily: "Dancing Script, cursive",
+            fontSize: "1.5rem"
+          }}>
+            Memory {selectedPhoto + 1} of {BIRTHDAY_PERSON.photos.length} ❤️
+          </p>
+        </div>
+      )}
 
       {/* Personal Wish Message */}
       <div className={`wish-container ${showWish ? "visible" : ""}`}>
@@ -408,8 +530,8 @@ export default function BirthdayCelebration() {
         )}
 
         {stage === "decorated" && (
-          <button className="magic-button cake-button fade-in" onClick={bringCake}>
-            🎂 Bring The Cake
+          <button className="magic-button cake-button fade-in" onClick={showBirthdayAndCelebrate}>
+            🎂 Happy Birthday!
           </button>
         )}
 
