@@ -80,6 +80,7 @@ export default function BirthdayCelebration() {
   const [showWish, setShowWish] = useState(false);
   const [showFireworks, setShowFireworks] = useState(false);
   const [audioPlaying, setAudioPlaying] = useState(false);
+  const [showNextButton, setShowNextButton] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Initialize audio with local happy birthday music
@@ -101,6 +102,7 @@ export default function BirthdayCelebration() {
 
   // Light up bulbs one by one
   const turnOnLights = useCallback(() => {
+    setShowNextButton(false);
     setStage("lights");
     BULB_COLORS.forEach((_, index) => {
       setTimeout(() => {
@@ -111,10 +113,13 @@ export default function BirthdayCelebration() {
         });
       }, index * 200);
     });
+    // Show next button after all bulbs are lit (12 bulbs * 200ms = 2400ms + 500ms buffer)
+    setTimeout(() => setShowNextButton(true), 3000);
   }, []);
 
   // Create balloons and stars for decoration
   const decorate = useCallback(() => {
+    setShowNextButton(false);
     playMusic();
     setStage("decorated");
 
@@ -146,6 +151,9 @@ export default function BirthdayCelebration() {
 
     // Create confetti burst
     launchConfetti();
+
+    // Show next button after decoration animation
+    setTimeout(() => setShowNextButton(true), 3000);
   }, []);
 
   // Launch confetti explosion
@@ -168,13 +176,17 @@ export default function BirthdayCelebration() {
 
   // Show birthday text and then celebrate
   const showBirthdayAndCelebrate = useCallback(() => {
+    setShowNextButton(false);
     setStage("cake");
     setShowBirthdayText(true);
     launchConfetti();
+    // Show next button after text animation
+    setTimeout(() => setShowNextButton(true), 2000);
   }, []);
 
   // Final celebration with gallery and wish
   const celebrate = useCallback(() => {
+    setShowNextButton(false);
     setShowBirthdayText(false);
     setCurrentPhoto(0);
 
@@ -236,6 +248,7 @@ export default function BirthdayCelebration() {
     setSelectedPhoto(null);
     setShowWish(false);
     setShowFireworks(false);
+    setShowNextButton(false);
     setCurrentPhoto(0);
   };
 
@@ -509,6 +522,19 @@ export default function BirthdayCelebration() {
             Dear {BIRTHDAY_PERSON.name},
           </h3>
           <p className="wish-text">{BIRTHDAY_PERSON.wishMessage}</p>
+
+          {/* Close button to go back to photos */}
+          <button
+            onClick={() => {
+              setShowWish(false);
+              setShowFireworks(false);
+              setShowAllPhotos(true);
+            }}
+            className="magic-button decorate-button"
+            style={{ marginTop: "30px" }}
+          >
+            ✕ Close & View Photos
+          </button>
         </div>
       </div>
 
@@ -523,19 +549,19 @@ export default function BirthdayCelebration() {
 
       {/* Action Buttons - Bottom of Screen */}
       <div className="button-wrapper">
-        {stage === "lights" && (
+        {stage === "lights" && showNextButton && (
           <button className="magic-button decorate-button fade-in" onClick={decorate}>
             ✨ Decorate
           </button>
         )}
 
-        {stage === "decorated" && (
+        {stage === "decorated" && showNextButton && (
           <button className="magic-button cake-button fade-in" onClick={showBirthdayAndCelebrate}>
             🎂 Happy Birthday!
           </button>
         )}
 
-        {stage === "cake" && showBirthdayText && !showWish && (
+        {stage === "cake" && showBirthdayText && showNextButton && !showWish && (
           <button className="magic-button celebrate-button fade-in" onClick={celebrate}>
             🎉 Celebrate!
           </button>
