@@ -1004,3 +1004,47 @@ body {
   box-shadow: 0 0 15px #ffd700;
   transform: scale(1.2);
 }
+
+/* ========================= */
+/* RESPONSIVE IMAGES & GRID  */
+/* ========================= */
+
+.slideshow-image {
+  width: 500px;
+  height: 500px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  border: 5px solid rgba(255, 255, 255, 0.1);
+}
+
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  max-width: 700px;
+  padding: 20px;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .slideshow-image {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  .photos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .photo-frame {
+    padding: 10px !important;
+  }
+
+  /* Override existing generic rule if present */
+  .photo-frame img {
+    width: auto;
+    height: auto;
+  }
+}

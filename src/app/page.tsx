@@ -356,8 +356,7 @@ export default function BirthdayCelebration() {
             alt={`Memory ${currentPhoto + 1}`}
             width={500}
             height={500}
-            className="gallery-photo"
-            style={{ width: "500px", height: "500px", objectFit: "cover" }}
+            className="gallery-photo slideshow-image"
             unoptimized
           />
           <div className="floating-hearts">
@@ -400,13 +399,7 @@ export default function BirthdayCelebration() {
         <p style={{ color: "#fff", marginBottom: "20px", fontSize: "1rem" }}>
           Click any photo to view it larger
         </p>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "15px",
-          maxWidth: "700px",
-          padding: "20px"
-        }}>
+        <div className="photos-grid">
           {BIRTHDAY_PERSON.photos.map((photo, index) => (
             <div
               key={index}
