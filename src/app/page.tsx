@@ -35,11 +35,16 @@ interface Confetti {
 // ============================================
 const BIRTHDAY_PERSON = {
   name: "Ayan",
-  // Add your own photo URLs here!
+  // Your personal photos!
   photos: [
-    "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&h=400&fit=crop", // Party lights
-    "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400&h=400&fit=crop", // Balloons
-    "https://images.unsplash.com/photo-1464349153735-7db50ed83c84?w=400&h=400&fit=crop", // Confetti
+    "/1.jpeg",
+    "/2.jpeg",
+    "/3.jpeg",
+    "/4.jpeg",
+    "/5.jpeg",
+    "/6.jpeg",
+    "/7.jpeg",
+    "/8.jpeg",
   ],
   wishMessage: `May this special day bring you endless joy, 
     laughter, and all the happiness your heart can hold! 
@@ -51,8 +56,8 @@ const BIRTHDAY_PERSON = {
     🎉✨🎂 Happy Birthday! 🎂✨🎉`,
 };
 
-// Cake image - a beautiful birthday cake
-const CAKE_IMAGE = "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop";
+// Cake image - using one of your images
+const CAKE_IMAGE = "/1.jpeg";
 
 // Bulb colors for the hanging lights
 const BULB_COLORS = ["red", "yellow", "green", "blue", "purple", "pink", "orange", "cyan", "red", "yellow", "green", "blue"];
@@ -78,25 +83,25 @@ export default function BirthdayCelebration() {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Initialize audio
+  // Initialize audio with local happy birthday music
   useEffect(() => {
     if (typeof window !== "undefined") {
-      audioRef.current = new Audio("https://www.soundjay.com/misc/sounds/magic-chime-01.mp3");
-      audioRef.current.loop = false;
+      audioRef.current = new Audio("/happy-birthday.mp3");
+      audioRef.current.loop = true; // Loop the birthday music
+      audioRef.current.volume = 0.7; // Set volume to 70%
     }
   }, []);
 
-  // Play magical sound effect
-  const playMagicSound = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
+  // Play birthday music
+  const playMusic = () => {
+    if (audioRef.current && !audioPlaying) {
       audioRef.current.play().catch(() => { });
+      setAudioPlaying(true);
     }
   };
 
   // Light up bulbs one by one
   const turnOnLights = useCallback(() => {
-    playMagicSound();
     setStage("lights");
     BULB_COLORS.forEach((_, index) => {
       setTimeout(() => {
@@ -111,7 +116,7 @@ export default function BirthdayCelebration() {
 
   // Create balloons and stars for decoration
   const decorate = useCallback(() => {
-    playMagicSound();
+    playMusic();
     setStage("decorated");
 
     // Create balloons
@@ -164,7 +169,6 @@ export default function BirthdayCelebration() {
 
   // Bring the cake and show birthday text
   const bringCake = useCallback(() => {
-    playMagicSound();
     setStage("cake");
     setShowCake(true);
 
@@ -176,7 +180,6 @@ export default function BirthdayCelebration() {
 
   // Final celebration with gallery and wish
   const celebrate = useCallback(() => {
-    playMagicSound();
     setShowBirthdayText(false);
     setShowCake(false);
 
@@ -247,8 +250,8 @@ export default function BirthdayCelebration() {
           <div
             key={s}
             className={`stage-dot ${["dark", "lights", "decorated", "cake", "celebrate"].indexOf(stage) >= i
-                ? "active"
-                : ""
+              ? "active"
+              : ""
               }`}
             title={s.charAt(0).toUpperCase() + s.slice(1)}
           />
@@ -384,9 +387,6 @@ export default function BirthdayCelebration() {
             Dear {BIRTHDAY_PERSON.name},
           </h3>
           <p className="wish-text">{BIRTHDAY_PERSON.wishMessage}</p>
-          <div style={{ marginTop: "30px", fontSize: "2rem" }}>
-            🎈🎁🎊🎉🎂🎉🎊🎁🎈
-          </div>
         </div>
       </div>
 
@@ -416,15 +416,6 @@ export default function BirthdayCelebration() {
         {stage === "cake" && showBirthdayText && !showWish && (
           <button className="magic-button celebrate-button fade-in" onClick={celebrate}>
             🎉 Celebrate!
-          </button>
-        )}
-
-        {showWish && (
-          <button
-            className="magic-button lights-button fade-in"
-            onClick={resetCelebration}
-          >
-            🔄 Celebrate Again
           </button>
         )}
       </div>
