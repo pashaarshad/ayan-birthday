@@ -348,13 +348,14 @@ export default function BirthdayCelebration() {
 
       {/* Photo Gallery / Memory Lane - Single Photo Slideshow */}
       <div className={`gallery-container ${showGallery ? "visible" : ""}`}>
-        <div className="photo-frame">
+        <div className="photo-frame" style={{ padding: "20px" }}>
           <Image
             src={BIRTHDAY_PERSON.photos[currentPhoto]}
             alt={`Memory ${currentPhoto + 1}`}
-            width={300}
-            height={300}
+            width={500}
+            height={500}
             className="gallery-photo"
+            style={{ width: "500px", height: "500px", objectFit: "cover" }}
             unoptimized
           />
           <div className="floating-hearts">
